@@ -1,3 +1,4 @@
+import argparse
 import pandas as pd
 import pymysql
 from sqlalchemy import create_engine
@@ -8,10 +9,10 @@ COMBINE_DATA_DIR = "../combine_out"
 START_YEAR = 2000
 END_YEAR = 2022
 
-def insert_into_sql():
-    draft, combine = combine_datasets()
+def insert_into_sql(draft, combine, db_username, db_password, db_host, db_databasename):
+    conn_url = f'mysql+pymysql://{db_username}:{db_password}@{db_host}/{db_databasename}'
 
-    e = create_engine('mysql+pymysql://root:root@localhost/combine')
+    e = create_engine(conn_url)
 
     combine = combine[['player_index', 'fourty_yard_dash', 'vertical', 'bench', 'broad_jump', 'cone_drill', 'shuttle']].fillna(0)
 
@@ -21,7 +22,7 @@ def insert_into_sql():
     combine.to_sql('combine', con=e, index=False)
 
 
-def combine_datasets():
+def combine_datasets(data_dir, start_year, end_year):
     new_draft_df = pd.DataFrame()
     new_combine_df = pd.DataFrame()
     player_idx = 0
@@ -79,4 +80,20 @@ def combine_datasets():
     return new_draft_df, new_combine_df
 
 if __name__ == '__main__':
-    insert_into_sql()
+    parser = argparse.ArgumentParser(
+            prog="Comine Dashboard",
+    )
+
+    parser.add_argument('-d', '--data-dir', default="../")
+    parser.add_argument('-u', '--database-user', default="root")
+    parser.add_argument('-p', '--database-password', default="root")
+    parser.add_argument('-n', '--database-name', default="combine")
+    parser.add_argument('-ho', '--database-host', default="localhost")
+    parser.add_argument('-s', '--start-year', type=int, default=2000)
+    parser.add_argument('-e', '--end-year', type=int, default=2022)
+
+    args = parser.parse_args()
+
+    draft_df, combine_df = combine_datasets(args.data_dir, args.start_year, args.end_year)
+    
+    insert_into_sql(draft_df, combine_df, args.database_user, args.database_password, args.database_host, args.database_name)

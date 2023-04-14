@@ -31,3 +31,16 @@ virtualenv env
 pip install -r requirements.txt
 python database.py
 ```
+
+If you have edited the docker-compose.yml in any way, or want to host either Grafana or the database in a different way, you can pass numerous flags to the database helper script:
+
+| Flag | Long                | Description                                                  | Default     |
+|------|---------------------|--------------------------------------------------------------|-------------|
+| -d   | --data-dir          | The directory where the script should look to find the data. | '../'       |
+| -u   | --database-user     | The database user                                            | 'root'      |
+| -p   | --database-password | The database password of that user                           | 'root'      |
+| -n   | --database-name     | The database name                                            | 'combine'   |
+| -ho  | --database-host     | The host where the database is hosted                        | 'localhost' |
+| -s   | --start-year        | The start year of the data                                   | '2000'      |
+| -e   | --end-year          | The end year of the data                                     | '2022'      |
+
