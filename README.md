@@ -1,5 +1,7 @@
 # Comebine Stats blogpost
 
+Relevant [blogpost](https://mitchellweg.github.io/combine-stats-part-1/)
+
 ## How to run:
 
 ### The dashboard itself
