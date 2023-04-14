@@ -1,0 +1,15 @@
+version: "3"
+
+services:
+  db:
+    image: mysql
+    environment:
+       MYSQL_ROOT_PASSWORD: root
+       MYSQL_DATABASE: combine
+    ports:
+      - 3306:3306
+
+  dashboard:
+    image: grafana/grafana
+    ports:
+      - 3000:3000
